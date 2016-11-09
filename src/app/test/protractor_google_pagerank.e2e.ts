@@ -3,9 +3,13 @@
  * @type {string}
  */
 const KEYWORDS = 'qi-gong nice';
-const LINK_TO_FIND = 'uncoeurenvie';
-const MAX_GOOGLE_PAGE_TO_CHECK = 10;
-const SLEEP_DURING_PAGES = 1000;
+const LINK_TO_FIND = 'uncoeurenvie'; // even just a part
+const MAX_GOOGLE_PAGE_TO_CHECK = 20;
+const SLEEP_BEFORE_NEW_PAGE = 1000;
+const SLEEP_AFTER_NEW_PAGE = 1000;
+const USE_HREF = 1;
+const USE_INNERTEXT = 2;
+const use_condition = USE_HREF;
 
 /**
  * find something on google page per page
@@ -15,8 +19,14 @@ const SLEEP_DURING_PAGES = 1000;
  */
 function findInPage(linkToFind:string, page: number) :any {
 
-  return browser.findElement(by.css(`a[href*="${LINK_TO_FIND}"]`))
-//  return browser.findElement(by.partialLinkText(linkToFind))
+  let conditionPromise;
+  if (use_condition == USE_INNERTEXT) {
+    conditionPromise = browser.findElement(by.partialLinkText(linkToFind));
+  } else {
+    conditionPromise = browser.findElement(by.css(`a[href*="${linkToFind}"]`));
+  }
+
+  return conditionPromise
     .then(element => {
 
       // #### PAGE FOUND
@@ -36,8 +46,9 @@ function findInPage(linkToFind:string, page: number) :any {
       if (page == MAX_GOOGLE_PAGE_TO_CHECK) {
         return Promise.reject(-1);
       }
+      browser.sleep(SLEEP_BEFORE_NEW_PAGE);
       element(by.css(`a[aria-label="Page ${++page}"`)).click(); //stuff to set the page
-      browser.sleep(SLEEP_DURING_PAGES);
+      browser.sleep(SLEEP_AFTER_NEW_PAGE);
       return findInPage(linkToFind, page);
     });
 }
