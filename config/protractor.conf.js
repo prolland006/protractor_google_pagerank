@@ -13,6 +13,7 @@ exports.config = {
     helpers.root('src/**/**.e2e.ts'),
     helpers.root('src/**/*.e2e.ts')
   ],
+  chromeDriver: 'C:/Users/patrice/AppData/Roaming/npm/node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.25.exe',
   exclude: [],
 
   framework: 'jasmine2',
