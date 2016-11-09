@@ -1,0 +1,16 @@
+<div class="card-container">
+  <h1 x-large class="sample-content">Upload</h1>
+    <form>
+
+      <!--enter filename and path-->
+      <!--<input type="text" [(ngModel)]="filename" name="filename">-->
+      <!--<button type="button" (click)="saveFilename(filename)">save</button>-->
+
+      <img [src]="imageSrc" height="200" alt="Image preview...">
+      <br>
+      <!--select file throught button -->
+      <input type="file" (change)="handleInputChange($event)" name="file" accept="image/*">
+
+
+    </form>
+</div>
