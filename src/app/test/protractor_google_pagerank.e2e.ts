@@ -3,9 +3,9 @@
  * @type {string}
  */
 const KEYWORDS = 'qi-gong nice';
-const LINK_TO_FIND = 'Fabienne';
+const LINK_TO_FIND = 'uncoeurenvie';
 const MAX_GOOGLE_PAGE_TO_CHECK = 10;
-const SLEEP_DURING_PAGES = 2000;
+const SLEEP_DURING_PAGES = 1000;
 
 /**
  * find something on google page per page
@@ -15,16 +15,24 @@ const SLEEP_DURING_PAGES = 2000;
  */
 function findInPage(linkToFind:string, page: number) :any {
 
-  return browser.findElement(by.partialLinkText(linkToFind))
-    .then((data) => {
-      return data.getText();
-    })
-    .then((data2 => {
-      //found
-      console.log('data2=',data2, ' page:',page);
+  return browser.findElement(by.css(`a[href*="${LINK_TO_FIND}"]`))
+//  return browser.findElement(by.partialLinkText(linkToFind))
+    .then(element => {
+
+      // #### PAGE FOUND
+      element.getText().then(text=>{
+        console.log('INNERTEXT : ', text);
+      });
+
+      element.getAttribute('href').then(attribute=>{
+        console.log('HREF : ', attribute);
+      });
+
+      console.log('PAGE : ', page);
       return page;
-    }),(err)=>{
-      //not found
+
+    },(err)=>{
+      // not found
       if (page == MAX_GOOGLE_PAGE_TO_CHECK) {
         return Promise.reject(-1);
       }
@@ -34,7 +42,7 @@ function findInPage(linkToFind:string, page: number) :any {
     });
 }
 
-describe('test protractor', () => {
+describe('pagerank on google tks to protractor', () => {
 
   fit('search link on google', (done) => {
     browser.get('https://www.google.fr/');
